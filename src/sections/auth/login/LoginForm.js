@@ -2,18 +2,43 @@ import * as Yup from 'yup';
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
-// material
 import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// component
 import Iconify from '../../../components/Iconify';
 
+// ----------------------------------------------------------------------
+const Config  = require("../../../utils/config");
+
+
+async function sendOTP(phone){
+  return fetch(`${Config.default.BACKEND_API}/vendor/user/send-otp`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify("+91",phone)
+  }).then(data => data.json()).catch(err => console.log(err.data))
+}
+
+async function loginUser(credentials) {
+  return fetch(`${Config.default.BACKEND_API}/vendor/user/verify-otp`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+ }
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const navigate = useNavigate();
 
+  const [showOTP, setShowOTP] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
+  const [phone, setPhone] = useState();
+  const [otp, setOTP] = useState();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
@@ -27,11 +52,12 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {      
-
-
-
-      navigate('/dashboard', { replace: true });
+    onSubmit: async (e) => {      
+      e.preventDefault();
+      if(phone != null){
+        console.log("error");
+      }  
+      // navigate('/dashboard', { replace: true });
     },
   });
 
@@ -48,14 +74,16 @@ export default function LoginForm() {
           <TextField
             fullWidth
             autoComplete="username"
-            type="email"
-            label="Email address"
+            type="number"
+            label="Enter Phone"
             {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
+            onChange={e => setPhone(e.target.value)}
+            // error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
 
           <TextField
+            className={showOTP ? 'show' : 'hide'}
             fullWidth
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
@@ -75,18 +103,12 @@ export default function LoginForm() {
           />
         </Stack>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-          <FormControlLabel
-            control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-            label="Remember me"
-          />
-
-          <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
-            Forgot password?
-          </Link>
-        </Stack>
-
-        <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }} />
+         
+        <LoadingButton className={sendOTP ? 'show' : 'hide'} fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+          Send OTP
+        </LoadingButton>
+        <LoadingButton className={sendOTP ? 'hide' : 'show'} fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
           Login
         </LoadingButton>
       </Form>
