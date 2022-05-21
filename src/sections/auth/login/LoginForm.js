@@ -10,16 +10,6 @@ import Iconify from '../../../components/Iconify';
 const Config  = require("../../../utils/config");
 
 
-async function sendOTP(phone){
-  return fetch(`${Config.default.BACKEND_API}/vendor/user/send-otp`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify("+91",phone)
-  }).then(data => data.json()).catch(err => console.log(err.data))
-}
-
 async function loginUser(credentials) {
   return fetch(`${Config.default.BACKEND_API}/vendor/user/verify-otp`, {
     method: 'POST',
@@ -40,6 +30,11 @@ export default function LoginForm() {
   const [phone, setPhone] = useState();
   const [otp, setOTP] = useState();
 
+  const sendOTP = () => {
+    console.log("sending otp");
+    setShowOTP(true);
+  }
+
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -52,6 +47,7 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
+
     onSubmit: async (e) => {      
       e.preventDefault();
       if(phone != null){
@@ -73,11 +69,11 @@ export default function LoginForm() {
         <Stack spacing={3}>
           <TextField
             fullWidth
-            autoComplete="username"
+            autoComplete="phone"
             type="number"
             label="Enter Phone"
             {...getFieldProps('email')}
-            onChange={e => setPhone(e.target.value)}
+            // onChange={e => setPhone(e.target.value)}
             // error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
@@ -105,10 +101,10 @@ export default function LoginForm() {
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }} />
          
-        <LoadingButton className={sendOTP ? 'show' : 'hide'} fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+        <LoadingButton className={showOTP ? 'hide' : 'show'} fullWidth size="large" variant="contained" loading={isSubmitting} onClick={sendOTP}>
           Send OTP
         </LoadingButton>
-        <LoadingButton className={sendOTP ? 'hide' : 'show'} fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+        <LoadingButton className={showOTP ? 'show' : 'hide'} fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
           Login
         </LoadingButton>
       </Form>
