@@ -91,19 +91,11 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             src="/static/illustrations/illustration_avatar.png"
             sx={{ width: 100, position: 'absolute', top: -50 }}
           />
-
           <Box sx={{ textAlign: 'center' }}>
-            <Typography gutterBottom variant="h6">
-              Get more?
-            </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              From only $69
+              Designed and Maintained by <br/><a href='https://wmishra.com'>W Mishra Digital</a>
             </Typography>
           </Box>
-
-          <Button href="https://material-ui.com/store/items/minimal-dashboard/" target="_blank" variant="contained">
-            Upgrade to Pro
-          </Button>
         </Stack>
       </Box>
     </Scrollbar>
