@@ -1,6 +1,7 @@
-import { filter } from 'lodash';
+import { filter, forEach } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
@@ -26,8 +27,9 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
+import USERLIST from '../helper/products';
 
+const Config  = require("../utils/config");
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -71,6 +73,8 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
+  const [productsData, setProductsData] = useState([]);
+
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -82,6 +86,29 @@ export default function User() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // Fetching Products from api
+  const getProducts = async () => {
+    const config = {
+      method: 'get',
+      url: `${Config.default.BACKEND_API}/vendor/user/products`,
+      headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
+      }
+    };
+    axios(config)
+      .then((res) => {
+        console.log(JSON.stringify(res.data));
+        const tempObj = res.data.categories.map((item) => item.products[0])
+        setProductsData(tempObj);
+      })
+      .catch((err) => {
+        console.log(JSON.stringify(err.data));
+      })
+  }
+
+  getProducts();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -128,7 +155,7 @@ export default function User() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(productsData, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -139,7 +166,7 @@ export default function User() {
           <Typography variant="h4" gutterBottom>
             My Products
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="../add-product" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Product
           </Button>
         </Stack>
@@ -154,14 +181,14 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={productsData.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, status, company, avatarUrl, isVerified } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -187,9 +214,7 @@ export default function User() {
                         <TableCell align="left">{company}</TableCell>
                         <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
-                            {sentenceCase(status)}
-                          </Label>
+                          Hello
                         </TableCell>
 
                         <TableCell align="right">

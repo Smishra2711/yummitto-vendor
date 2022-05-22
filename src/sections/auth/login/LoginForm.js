@@ -27,7 +27,7 @@ export default function LoginForm() {
       axios.post(`${Config.default.BACKEND_API}/vendor/user/send-otp`,
       {
         "phoneCode":"+91",
-        "phoneNumber":"7977831041"
+        "phoneNumber":phoneNumber
       }).then((res) => {
         if(res.status === 200){
           setShowOTP(true)
@@ -43,12 +43,12 @@ export default function LoginForm() {
     if(otp != null){
       axios.post(`${Config.default.BACKEND_API}/vendor/user/verify-otp`,
       {
-        "otp":"123456",
+        "otp":otp,
         "phoneCode":"+91",
-        "phoneNumber":"7977831041"
+        "phoneNumber":phoneNumber
       }).then((res) => {
         if(res.status === 200){
-          localStorage.setItem("yummittoVendorToken",res.data);
+          localStorage.setItem("yummittoVendorToken",res.data.token);
           navigate('/dashboard', { replace: true })
         }
       })
