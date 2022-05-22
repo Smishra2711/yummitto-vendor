@@ -188,7 +188,7 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, isAvailable, description, image, amount } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -205,18 +205,15 @@ export default function User() {
                         </TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            <Avatar alt={name} src={image} />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                        <TableCell align="left">
-                          Hello
-                        </TableCell>
-
+                        <TableCell align="left">{description}</TableCell>
+                        <TableCell align="left">{amount}</TableCell>
+                        <TableCell align="left">{isAvailable ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>
