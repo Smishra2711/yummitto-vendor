@@ -20,13 +20,6 @@ const PRODUCT_NAME = [
   'Nike Air Force 1 Shadow SE',
   'Nike Air Zoom Tempo NEXT%',
   'Nike DBreak-Type',
-  'Nike Air Max Up',
-  'Nike Air Max 270 React ENG',
-  'NikeCourt Royale',
-  'Nike Air Zoom Pegasus 37 Premium',
-  'Nike Air Zoom SuperRep',
-  'NikeCourt Royale',
-  'Nike React Art3mis',
   'Nike React Infinity Run Flyknit A.I.R. Chaz Bear',
 ];
 const PRODUCT_COLOR = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
