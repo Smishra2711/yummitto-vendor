@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import axios from 'axios';
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -6,20 +7,11 @@ import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormContr
 import { LoadingButton } from '@mui/lab';
 import Iconify from '../../../components/Iconify';
 
+
 // ----------------------------------------------------------------------
 const Config  = require("../../../utils/config");
 
 
-async function loginUser(credentials) {
-  return fetch(`${Config.default.BACKEND_API}/vendor/user/verify-otp`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
- }
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
@@ -27,12 +19,43 @@ export default function LoginForm() {
 
   const [showOTP, setShowOTP] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
-  const [phone, setPhone] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
   const [otp, setOTP] = useState();
 
-  const sendOTP = () => {
-    console.log("sending otp");
-    setShowOTP(true);
+  const sendOTP = () => { 
+    if(phoneNumber != null){
+      axios.post(`${Config.default.BACKEND_API}/vendor/user/send-otp`,
+      {
+        "phoneCode":"+91",
+        "phoneNumber":"7977831041"
+      }).then((res) => {
+        if(res.status === 200){
+          setShowOTP(true)
+        }
+      })
+      .catch(err => alert("Some error occured"))
+    }else{
+      alert("Please Enter Mobile")
+    }     
+  }
+
+  const verifyOTP = () => {
+    if(otp != null){
+      axios.post(`${Config.default.BACKEND_API}/vendor/user/verify-otp`,
+      {
+        "otp":"123456",
+        "phoneCode":"+91",
+        "phoneNumber":"7977831041"
+      }).then((res) => {
+        if(res.status === 200){
+          localStorage.setItem("yummittoVendorToken",res.data);
+          navigate('/dashboard', { replace: true })
+        }
+      })
+      .catch(err => alert("Some error occured"))
+    }else{
+      alert("Please Enter OTP")
+    }     
   }
 
   const LoginSchema = Yup.object().shape({
@@ -49,10 +72,8 @@ export default function LoginForm() {
     validationSchema: LoginSchema,
 
     onSubmit: async (e) => {      
-      e.preventDefault();
-      if(phone != null){
-        console.log("error");
-      }  
+      e.preventDefault(); 
+      verifyOTP();
       // navigate('/dashboard', { replace: true });
     },
   });
@@ -72,8 +93,10 @@ export default function LoginForm() {
             autoComplete="phone"
             type="number"
             label="Enter Phone"
-            {...getFieldProps('email')}
-            // onChange={e => setPhone(e.target.value)}
+            disabled = {showOTP}
+            onChange={(e) => {
+              setPhoneNumber(e.target.value);
+            }}
             // error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
@@ -81,20 +104,10 @@ export default function LoginForm() {
           <TextField
             className={showOTP ? 'show' : 'hide'}
             fullWidth
-            autoComplete="current-password"
-            type={showPassword ? 'text' : 'password'}
-            label="Password"
-            {...getFieldProps('password')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleShowPassword} edge="end">
-                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            error={Boolean(touched.password && errors.password)}
+            type="number"
+            label="Enter OTP"
+            onChange={(e) => setOTP(e.target.value)}
+            // error={Boolean(touched.password && errors.password)}
             helperText={touched.password && errors.password}
           />
         </Stack>
@@ -104,7 +117,7 @@ export default function LoginForm() {
         <LoadingButton className={showOTP ? 'hide' : 'show'} fullWidth size="large" variant="contained" loading={isSubmitting} onClick={sendOTP}>
           Send OTP
         </LoadingButton>
-        <LoadingButton className={showOTP ? 'show' : 'hide'} fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+        <LoadingButton className={showOTP ? 'show' : 'hide'} fullWidth size="large" variant="contained" loading={isSubmitting} onClick={verifyOTP}>
           Login
         </LoadingButton>
       </Form>

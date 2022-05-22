@@ -1,7 +1,7 @@
 
 const Config = {
     
-    BACKEND_API:"https://v1.api.yummittoapp.com/"
+    BACKEND_API:"https://api.togodelivery.in"
 }
 
 export default Config;
