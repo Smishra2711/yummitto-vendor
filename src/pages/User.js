@@ -31,11 +31,11 @@ import USERLIST from '../_mock/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'name', label: 'Product Name', alignRight: false },
+  { id: 'company', label: 'Description', alignRight: false },
+  { id: 'role', label: 'Amount', alignRight: false },
+  { id: 'isVerified', label: 'isAvailable', alignRight: false },
+  { id: 'status', label: 'Action', alignRight: false },
   { id: '' },
 ];
 
@@ -137,10 +137,10 @@ export default function User() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            My Products
           </Typography>
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New User
+            New Product
           </Button>
         </Stack>
 
@@ -185,7 +185,6 @@ export default function User() {
                           </Stack>
                         </TableCell>
                         <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
                         <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
