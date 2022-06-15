@@ -27,7 +27,7 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../helper/products';
+import USERLIST from '../_mock/user';
 
 const Config  = require("../utils/config");
 // ----------------------------------------------------------------------
