@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------
 import axios from 'axios';
+
+
 const Config = require("../utils/config");
 
 const account = {};
@@ -17,7 +19,7 @@ const getProducts = async () => {
   axios(config)
     .then((res) => {
       console.log(JSON.stringify(res.data));
-      const tempObj = res.data.categories.map((item) => item.products[0]);
+      const tempObj = res.data.store;
       account.name = "Yummitto Vendor";
       account.email = "";
       account.photoURL = "";
