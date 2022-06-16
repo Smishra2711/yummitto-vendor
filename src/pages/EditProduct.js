@@ -169,12 +169,27 @@ export default function EditProduct() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
-
           <Scrollbar>
+
+          <TextField
+            id="name-input"
+              name="name"
+                label="Name"
+                  type="text"
+                    value={formValues.name}
+                      onChange={handleInputChange}
+                      />
+
+          <TextField
+            id="name-input"
+              name="name"
+                label="Name"
+                  type="text"
+                    value={formValues.name}
+                      onChange={handleInputChange}
+                      />
           
           </Scrollbar>
-
         </Card>
       </Container>
     </Page>
