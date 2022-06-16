@@ -1,61 +1,69 @@
 import * as Yup from 'yup';
-import { filter, forEach } from 'lodash';
 import axios from 'axios';
 import React, { useState, useEffect } from "react";
-import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
+import { useNavigate } from 'react-router-dom';
 // material
-import {
-  Card,
-  Grid,
-  Stack,
-  Avatar,
-  TextField,
-  Button,
-  Checkbox,
-  Container,
-  Typography,
-} from '@mui/material';
+import { Card, Container, Stack, TextField, IconButton, InputAdornment, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// components
+// component
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
-import SearchNotFound from '../components/SearchNotFound';
-// mock
-import USERLIST from '../_mock/user';
 
 const Config = require("../utils/config");
-// ---------------------------------------------------------------------
-
-const defaultValues = {
-  name: "",
-  age: 0,
-  sex: "",
-  os: "",
-  favoriteNumber: 0,
-};
 
 // ----------------------------------------------------------------------
 
-
-
 export default function EditProduct() {
+  const navigate = useNavigate();
   const [productsData, setProductsData] = useState([]);
 
-  const [formValues, setFormValues] = useState(defaultValues);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
+  const RegisterSchema = Yup.object().shape({
+    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
+    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
+    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    password: Yup.string().required('Password is required'),
+  });
+  
+  const formik = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    },
+    validationSchema: RegisterSchema,
+    onSubmit: () => {
+      navigate('/dashboard', { replace: true });
+    },
+  });
+  
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
 
   // Fetching Products from api
   const getProducts = async () => {
+    const config = {
+      method: 'get',
+      url: `${Config.default.BACKEND_API}/vendor/user/products`,
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
+      }
+    };
+    axios(config)
+      .then((res) => {
+        console.log(JSON.stringify(res.data));
+        const tempObj = res.data.categories.map((item) => item.products[0])
+        setProductsData(tempObj);
+      })
+      .catch((err) => {
+        console.log(JSON.stringify(err.data));
+      })
+  }
+
+  const updateProduct = async () => {
     const config = {
       method: 'get',
       url: `${Config.default.BACKEND_API}/vendor/user/products`,
@@ -88,49 +96,53 @@ export default function EditProduct() {
 
         <Card>
           <Scrollbar>
-            <Grid container alignItems="center" justify="center" direction="column">
-              <Grid item>
-                <TextField
-                  id="name-input"
-                  name="name"
-                  label="Name"
-                  type="text"
-                  value={formValues.name}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  id="age-input"
-                  name="age"
-                  label="Age"
-                  type="number"
-                  value={formValues.age}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  id="name-input"
-                  name="name"
-                  label="Name"
-                  type="text"
-                  value={formValues.name}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  id="age-input"
-                  name="age"
-                  label="Age"
-                  type="number"
-                  value={formValues.age}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              </Grid>
+            <FormikProvider value={formik}>
+              <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+                <Stack spacing={3}>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      label="First name"
+                      {...getFieldProps('firstName')}
+                      error={Boolean(touched.firstName && errors.firstName)}
+                      helperText={touched.firstName && errors.firstName}
+                    />
 
+                    <TextField
+                      fullWidth
+                      label="Last name"
+                      {...getFieldProps('lastName')}
+                      error={Boolean(touched.lastName && errors.lastName)}
+                      helperText={touched.lastName && errors.lastName}
+                    />
+                  </Stack>
+
+                  <TextField
+                    fullWidth
+                    autoComplete="username"
+                    type="email"
+                    label="Email address"
+                    {...getFieldProps('email')}
+                    error={Boolean(touched.email && errors.email)}
+                    helperText={touched.email && errors.email}
+                  />
+
+                  <TextField
+                    fullWidth
+                    autoComplete="current-password"
+                    type='text'
+                    label="Password"
+                    {...getFieldProps('password')}
+                    error={Boolean(touched.password && errors.password)}
+                    helperText={touched.password && errors.password}
+                  />
+
+                  <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+                    Register
+                  </LoadingButton>
+                </Stack>
+              </Form>
+            </FormikProvider>
           </Scrollbar>
         </Card>
       </Container>

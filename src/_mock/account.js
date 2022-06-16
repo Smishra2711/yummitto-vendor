@@ -4,9 +4,9 @@ import axios from 'axios';
 
 const Config = require("../utils/config");
 
-const account = {};
-
-console.log("Loading account");
+const account = {
+  name:"Vendor Name"
+};
 
 // Fetching User Details from api
 const getAccount = async () => {
