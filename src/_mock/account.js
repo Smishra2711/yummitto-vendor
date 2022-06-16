@@ -6,8 +6,10 @@ const Config = require("../utils/config");
 
 const account = {};
 
+console.log("Loading account");
+
 // Fetching User Details from api
-const getProducts = async () => {
+const getAccount = async () => {
   const config = {
     method: 'get',
     url: `${Config.default.BACKEND_API}/vendor/user/store`,
@@ -28,5 +30,7 @@ const getProducts = async () => {
       console.log(JSON.stringify(err.data));
     })
 }
+
+getAccount();
 
 export default account;
