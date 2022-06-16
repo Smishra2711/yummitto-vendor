@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import Products from './pages/Products';
+import EditProduct from './pages/EditProduct';
 import DashboardApp from './pages/DashboardApp';
 
 // ----------------------------------------------------------------------
@@ -22,7 +23,7 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'my-products', element: <User />},
-        { path: 'edit-product/:id', element: <Products />}
+        { path: 'edit-product/:id', element: <EditProduct />}
       ],
     },
     {
