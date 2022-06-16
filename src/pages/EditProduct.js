@@ -70,7 +70,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function EditProduct() {
   const [productsData, setProductsData] = useState([]);
 
   const [formValues, setFormValues] = useState(defaultValues);
