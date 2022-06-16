@@ -9,7 +9,7 @@ import {
   Table,
   Stack,
   Avatar,
-  Textfield,
+  TextField,
   Button,
   Checkbox,
   Container,
@@ -26,28 +26,19 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashbo
 // mock
 import USERLIST from '../_mock/user';
 
-const Config  = require("../utils/config");
+const Config = require("../utils/config");
 // ---------------------------------------------------------------------
 
 const defaultValues = {
-    name: "",
-    age: 0,
-    sex: "",
-    os: "",
-    favoriteNumber: 0,
-  };
+  name: "",
+  age: 0,
+  sex: "",
+  os: "",
+  favoriteNumber: 0,
+};
 
 // ----------------------------------------------------------------------
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
 
 
 export default function EditProduct() {
@@ -56,12 +47,12 @@ export default function EditProduct() {
   const [formValues, setFormValues] = useState(defaultValues);
 
   const handleInputChange = (e) => {
-        const { name, value } = e.target;
-            setFormValues({
-              ...formValues,
-              [name]: value,
-         });
-    };
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
 
 
   // Fetching Products from api
@@ -70,8 +61,8 @@ export default function EditProduct() {
       method: 'get',
       url: `${Config.default.BACKEND_API}/vendor/user/products`,
       headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
+        "content-type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
       }
     };
     axios(config)
@@ -98,25 +89,49 @@ export default function EditProduct() {
 
         <Card>
           <Scrollbar>
-
-          <TextField
-            id="name-input"
-              name="name"
-                label="Name"
+            <Grid container alignItems="center" justify="center" direction="column">
+              <Grid item>
+                <TextField
+                  id="name-input"
+                  name="name"
+                  label="Name"
                   type="text"
-                    value={formValues.name}
-                      onChange={handleInputChange}
-                      />
-
-          <TextField
-            id="name-input"
-              name="name"
-                label="Name"
+                  value={formValues.name}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  id="age-input"
+                  name="age"
+                  label="Age"
+                  type="number"
+                  value={formValues.age}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  id="name-input"
+                  name="name"
+                  label="Name"
                   type="text"
-                    value={formValues.name}
-                      onChange={handleInputChange}
-                      />
-          
+                  value={formValues.name}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  id="age-input"
+                  name="age"
+                  label="Age"
+                  type="number"
+                  value={formValues.age}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              </Grid>
+
           </Scrollbar>
         </Card>
       </Container>
