@@ -6,7 +6,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import {
   Card,
   Grid,
-  Table,
   Stack,
   Avatar,
   TextField,
@@ -14,15 +13,12 @@ import {
   Checkbox,
   Container,
   Typography,
-  TableContainer,
-  TablePagination,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
 
