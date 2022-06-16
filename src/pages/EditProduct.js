@@ -22,23 +22,40 @@ export default function EditProduct() {
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    name: "Biriyani",
+    description: "Vin GN kk na",
+    image: "",
+    category: "c670252c-d06d-4307-a245-ac1a9307c37f",
+    isVariant: false,
+    store: "8e3d5689-83c8-4601-9115-37b577600a0d",
+    price: 150,
+    cgst: 1,
+    sgst: 1,
+    isVeg: false,
+    isAvailable: true
   });
-  
+
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
+      id: "2b829a92-47fa-471c-9268-3acdacb3ece1",
+      name: "Biriyani",
+      description: "Vin GN kk na",
+      image: "",
+      category: "c670252c-d06d-4307-a245-ac1a9307c37f",
+      isVariant: false,
+      store: "8e3d5689-83c8-4601-9115-37b577600a0d",
+      price: 150,
+      cgst: 1,
+      sgst: 1,
+      isVeg: false,
+      isAvailable: true
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
       navigate('/dashboard', { replace: true });
     },
   });
-  
+
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
 
@@ -102,41 +119,81 @@ export default function EditProduct() {
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                       fullWidth
-                      label="First name"
-                      {...getFieldProps('firstName')}
-                      error={Boolean(touched.firstName && errors.firstName)}
-                      helperText={touched.firstName && errors.firstName}
+                      label="Product name"
+                      {...getFieldProps('name')}
+                      error={Boolean(touched.name && errors.name)}
+                      helperText={touched.name && errors.name}
                     />
 
                     <TextField
                       fullWidth
-                      label="Last name"
-                      {...getFieldProps('lastName')}
-                      error={Boolean(touched.lastName && errors.lastName)}
-                      helperText={touched.lastName && errors.lastName}
+                      label="Category"
+                      {...getFieldProps('category')}
+                      error={Boolean(touched.category && errors.category)}
+                      helperText={touched.category && errors.category}
                     />
                   </Stack>
 
                   <TextField
-                    fullWidth
-                    autoComplete="username"
-                    type="email"
-                    label="Email address"
-                    {...getFieldProps('email')}
-                    error={Boolean(touched.email && errors.email)}
-                    helperText={touched.email && errors.email}
-                  />
+                      fullWidth
+                      label="Descripion"
+                      {...getFieldProps('description')}
+                      error={Boolean(touched.description && errors.description)}
+                      helperText={touched.description && errors.description}
+                    />
 
-                  <TextField
-                    fullWidth
-                    autoComplete="current-password"
-                    type='text'
-                    label="Password"
-                    {...getFieldProps('password')}
-                    error={Boolean(touched.password && errors.password)}
-                    helperText={touched.password && errors.password}
-                  />
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      label="CGST"
+                      {...getFieldProps('cgst')}
+                      error={Boolean(touched.cgst && errors.cgst)}
+                      helperText={touched.cgst && errors.cgst}
+                    />
 
+                    <TextField
+                      fullWidth
+                      label="CGST"
+                      {...getFieldProps('sgst')}
+                      error={Boolean(touched.sgst && errors.sgst)}
+                      helperText={touched.sgst && errors.sgst}
+                    />
+
+                    <TextField
+                      fullWidth
+                      label="Descripion"
+                      {...getFieldProps('price')}
+                      error={Boolean(touched.price && errors.price)}
+                      helperText={touched.price && errors.price}
+                    />
+                  </Stack>
+
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      label="isVariant"
+                      {...getFieldProps('isVariant')}
+                      error={Boolean(touched.isVariant && errors.isVariant)}
+                      helperText={touched.isVariant && errors.isVariant}
+                    />
+
+                    <TextField
+                      fullWidth
+                      label="isVeg"
+                      {...getFieldProps('isVeg')}
+                      error={Boolean(touched.isVeg && errors.isVeg)}
+                      helperText={touched.isVeg && errors.isVeg}
+                    />
+
+                    <TextField
+                      fullWidth
+                      label="isAvailable"
+                      {...getFieldProps('isAvailable')}
+                      error={Boolean(touched.isAvailable && errors.isAvailable)}
+                      helperText={touched.isAvailable && errors.isAvailable}
+                    />
+                  </Stack>
+                  
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
                     Register
                   </LoadingButton>
