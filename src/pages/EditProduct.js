@@ -5,9 +5,11 @@ import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
   Card,
+  Grid,
   Table,
   Stack,
   Avatar,
+  Textfield,
   Button,
   Checkbox,
   Container,
@@ -25,16 +27,15 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashbo
 import USERLIST from '../_mock/user';
 
 const Config  = require("../utils/config");
-// ----------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'name', label: 'Product Name', alignRight: false },
-  { id: 'company', label: 'Description', alignRight: false },
-  { id: 'role', label: 'Amount', alignRight: false },
-  { id: 'isVerified', label: 'isAvailable', alignRight: false },
-  { id: 'status', label: 'Action', alignRight: false },
-  { id: '' },
-];
+const defaultValues = {
+    name: "",
+    age: 0,
+    sex: "",
+    os: "",
+    favoriteNumber: 0,
+  };
 
 // ----------------------------------------------------------------------
 
@@ -48,29 +49,19 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-  return stabilizedThis.map((el) => el[0]);
-}
 
 export default function EditProduct() {
   const [productsData, setProductsData] = useState([]);
 
   const [formValues, setFormValues] = useState(defaultValues);
+
+  const handleInputChange = (e) => {
+        const { name, value } = e.target;
+            setFormValues({
+              ...formValues,
+              [name]: value,
+         });
+    };
 
 
   // Fetching Products from api
@@ -96,21 +87,6 @@ export default function EditProduct() {
 
   getProducts();
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
-  };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
