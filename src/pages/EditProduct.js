@@ -87,19 +87,12 @@ export default function EditProduct() {
 
   getProducts();
 
-
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
-
-  const filteredUsers = applySortFilter(productsData, getComparator(order, orderBy), filterName);
-
-  const isUserNotFound = filteredUsers.length === 0;
-
   return (
-    <Page title="User">
+    <Page title="Edit Product">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Edit Produc
+            Edit Product
           </Typography>
         </Stack>
 
