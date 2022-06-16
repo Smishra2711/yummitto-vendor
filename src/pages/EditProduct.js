@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Card, Container, Stack, TextField, IconButton, InputAdornment, Typography } from '@mui/material';
+import { Card, Container, Stack, TextField, FormControlLabel, Switch, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Page from '../components/Page';
@@ -135,12 +135,12 @@ export default function EditProduct() {
                   </Stack>
 
                   <TextField
-                      fullWidth
-                      label="Descripion"
-                      {...getFieldProps('description')}
-                      error={Boolean(touched.description && errors.description)}
-                      helperText={touched.description && errors.description}
-                    />
+                    fullWidth
+                    label="Descripion"
+                    {...getFieldProps('description')}
+                    error={Boolean(touched.description && errors.description)}
+                    helperText={touched.description && errors.description}
+                  />
 
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
@@ -169,31 +169,29 @@ export default function EditProduct() {
                   </Stack>
 
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <TextField
-                      fullWidth
+                  
+                    <FormControlLabel
+                      value="start"
+                      control={<Switch color="primary" checked={{ ...getFieldProps('isVariant') }} />}
                       label="isVariant"
-                      {...getFieldProps('isVariant')}
-                      error={Boolean(touched.isVariant && errors.isVariant)}
-                      helperText={touched.isVariant && errors.isVariant}
+                      labelPlacement="start"
                     />
 
-                    <TextField
-                      fullWidth
+                    <FormControlLabel
+                      value="start"
+                      control={<Switch color="primary" checked={{ ...getFieldProps('isAvailable') }} />}
                       label="isVeg"
-                      {...getFieldProps('isVeg')}
-                      error={Boolean(touched.isVeg && errors.isVeg)}
-                      helperText={touched.isVeg && errors.isVeg}
+                      labelPlacement="start"
                     />
 
-                    <TextField
-                      fullWidth
+                    <FormControlLabel
+                      value="start"
+                      control={<Switch color="primary" checked={{ ...getFieldProps('isAvailable') }} />}
                       label="isAvailable"
-                      {...getFieldProps('isAvailable')}
-                      error={Boolean(touched.isAvailable && errors.isAvailable)}
-                      helperText={touched.isAvailable && errors.isAvailable}
+                      labelPlacement="start"
                     />
                   </Stack>
-                  
+
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
                     Register
                   </LoadingButton>
