@@ -22,6 +22,7 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'my-products', element: <User />},
+        { path: 'edit-product/:id', element: <Products />}
       ],
     },
     {
