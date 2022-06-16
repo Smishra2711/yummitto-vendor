@@ -10,9 +10,6 @@ import {
   Avatar,
   Button,
   Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
   Container,
   Typography,
   TableContainer,
@@ -75,17 +72,6 @@ export default function EditProduct() {
 
   const [formValues, setFormValues] = useState(defaultValues);
 
-  const [page, setPage] = useState(0);
-
-  const [order, setOrder] = useState('asc');
-
-  const [selected, setSelected] = useState([]);
-
-  const [orderBy, setOrderBy] = useState('name');
-
-  const [filterName, setFilterName] = useState('');
-
-  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Fetching Products from api
   const getProducts = async () => {
