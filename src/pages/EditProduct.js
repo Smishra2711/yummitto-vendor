@@ -7,7 +7,7 @@ import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import {
   Card,
-  Table,
+  Grid,
   Stack,
   Avatar,
   TextField,
@@ -19,44 +19,39 @@ import {
 import { LoadingButton } from '@mui/lab';
 // components
 import Page from '../components/Page';
+import Scrollbar from '../components/Scrollbar';
+import Iconify from '../components/Iconify';
+import SearchNotFound from '../components/SearchNotFound';
 // mock
 import USERLIST from '../_mock/user';
 
-const Config  = require("../utils/config");
+const Config = require("../utils/config");
+// ---------------------------------------------------------------------
+
+const defaultValues = {
+  name: "",
+  age: 0,
+  sex: "",
+  os: "",
+  favoriteNumber: 0,
+};
+
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'name', label: 'Product Name', alignRight: false },
-  { id: 'company', label: 'Description', alignRight: false },
-  { id: 'role', label: 'Amount', alignRight: false },
-  { id: 'isVerified', label: 'isAvailable', alignRight: false },
-  { id: 'status', label: 'Action', alignRight: false },
-  { id: '' },
-];
-
-// ----------------------------------------------------------------------
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
 
 
 export default function EditProduct() {
   const [productsData, setProductsData] = useState([]);
 
-  const [page, setPage] = useState(0);
+  const [formValues, setFormValues] = useState(defaultValues);
 
-  const [order, setOrder] = useState('asc');
-
-  const [selected, setSelected] = useState([]);
-
-  const [orderBy, setOrderBy] = useState('name');
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
 
 
   // Fetching Products from api
@@ -65,8 +60,8 @@ export default function EditProduct() {
       method: 'get',
       url: `${Config.default.BACKEND_API}/vendor/user/products`,
       headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
+        "content-type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
       }
     };
     axios(config)
@@ -82,28 +77,6 @@ export default function EditProduct() {
 
   getProducts();
 
-  const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-      remember: true,
-    },
-    validationSchema: LoginSchema,
-
-    onSubmit: async (e) => {      
-      e.preventDefault(); 
-      // verifyOTP();
-      // navigate('/dashboard', { replace: true });
-    },
-  });
-
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-
   return (
     <Page title="Edit Product">
       <Container>
@@ -114,28 +87,51 @@ export default function EditProduct() {
         </Stack>
 
         <Card>
-        <FormikProvider value={formik}>
-            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-              <Stack spacing={3}>
+          <Scrollbar>
+            <Grid container alignItems="center" justify="center" direction="column">
+              <Grid item>
                 <TextField
-                  autoComplete="phone"
+                  id="name-input"
+                  name="name"
+                  label="Name"
                   type="text"
-                  label="Enter Name"
-                  // error={Boolean(touched.email && errors.email)}
-
-                  helperText={touched.email && errors.email}
+                  value={formValues.name}
+                  onChange={handleInputChange}
                 />
+              </Grid>
+              <Grid item>
+                <TextField
+                  id="age-input"
+                  name="age"
+                  label="Age"
+                  type="number"
+                  value={formValues.age}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  id="name-input"
+                  name="name"
+                  label="Name"
+                  type="text"
+                  value={formValues.name}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  id="age-input"
+                  name="age"
+                  label="Age"
+                  type="number"
+                  value={formValues.age}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              </Grid>
 
-              </Stack>
-
-              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }} />
-              
-              
-              <LoadingButton fullWidth size="large" variant="contained" loading={isSubmitting} >
-                Save
-              </LoadingButton>
-            </Form>
-          </FormikProvider>
+          </Scrollbar>
         </Card>
       </Container>
     </Page>
