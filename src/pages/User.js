@@ -216,7 +216,7 @@ export default function User() {
                           <Switch color="primary" checked={isAvailable} disabled/>
                         </TableCell>
                         <TableCell align="right">
-                          <UserMoreMenu productId={id} productName={name} cgstCharge={cgst}/>
+                          <UserMoreMenu productId={id} productName={name} productPrice={price}/>
                         </TableCell>
                       </TableRow>
                     );

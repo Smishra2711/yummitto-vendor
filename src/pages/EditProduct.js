@@ -14,19 +14,15 @@ const Config = require("../utils/config");
 
 // ----------------------------------------------------------------------
 
-export default function EditProduct() {
+export default function EditProduct(props) {
   const navigate = useNavigate();
   const storeId ="8e3d5689-83c8-4601-9115-37b577600a0d";
-  const { productId } = useParams();
-  const [productsData, setProductsData] = useState([]);
+  const { productId, productName, productPrice } = useParams();
 
   const RegisterSchema = Yup.object().shape({
     name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Product name required'),
     description: Yup.string().min(2, 'Too Short!').max(100, 'Too Long!').required('Description is required'),
     image: "",
-    category: "c670252c-d06d-4307-a245-ac1a9307c37f",
-    isVariant: false,
-    store: Yup.string().required('Description is required'),
     price: Yup.number().required("Please enter Price"),
     cgst: Yup.number().required("Please Enter CGST"),
     sgst: Yup.number().required("Please Enter SGST")
@@ -34,48 +30,19 @@ export default function EditProduct() {
 
   const formik = useFormik({
     initialValues: {
-      id: "2b829a92-47fa-471c-9268-3acdacb3ece1",
-      name: "Biriyani",
-      description: "Vin GN kk na",
-      image: "",
-      category: "c670252c-d06d-4307-a245-ac1a9307c37f",
-      isVariant: false,
-      store: "8e3d5689-83c8-4601-9115-37b577600a0d",
-      price: 150,
-      cgst: 1,
-      sgst: 1,
-      isVeg: false,
-      isAvailable: true
+      id: productId,
+      name: productName,
+      price: productPrice
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+      if(updateProduct()){
+        navigate('/dashboard', { replace: true });
+      }
     },
   });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
-
-
-  // Fetching Products from api
-  const getProducts = async () => {
-    const config = {
-      method: 'get',
-      url: `${Config.default.BACKEND_API}/vendor/user/products`,
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
-      }
-    };
-    axios(config)
-      .then((res) => {
-        console.log(JSON.stringify(res.data));
-        const tempObj = res.data.categories.map((item) => item.products[0])
-        setProductsData(tempObj);
-      })
-      .catch((err) => {
-        console.log(JSON.stringify(err.data));
-      })
-  }
 
   const updateProduct = async () => {
     const config = {
@@ -89,15 +56,14 @@ export default function EditProduct() {
     axios(config)
       .then((res) => {
         console.log(JSON.stringify(res.data));
-        const tempObj = res.data.categories.map((item) => item.products[0])
-        setProductsData(tempObj);
+        return true;
       })
       .catch((err) => {
         console.log(JSON.stringify(err.data));
+        alert(err.data);
+        return false;
       })
   }
-
-  getProducts();
 
   return (
     <Page title="Edit Product">
@@ -125,9 +91,10 @@ export default function EditProduct() {
                     <TextField
                       fullWidth
                       label="Category"
-                      {...getFieldProps('category')}
-                      error={Boolean(touched.category && errors.category)}
-                      helperText={touched.category && errors.category}
+                      {...getFieldProps('image')}
+                      error={Boolean(touched.image && errors.image)}
+                      helperText={touched.image && errors.image}
+                      disabled
                     />
                   </Stack>
 
@@ -137,6 +104,7 @@ export default function EditProduct() {
                     {...getFieldProps('description')}
                     error={Boolean(touched.description && errors.description)}
                     helperText={touched.description && errors.description}
+                    disabled
                   />
 
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -158,39 +126,15 @@ export default function EditProduct() {
 
                     <TextField
                       fullWidth
-                      label="Descripion"
+                      label="Price"
                       {...getFieldProps('price')}
                       error={Boolean(touched.price && errors.price)}
                       helperText={touched.price && errors.price}
                     />
                   </Stack>
 
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  
-                    <FormControlLabel
-                      value="start"
-                      control={<Switch color="primary" checked={{ ...getFieldProps('isVariant') }} />}
-                      label="isVariant"
-                      labelPlacement="start"
-                    />
-
-                    <FormControlLabel
-                      value="start"
-                      control={<Switch color="primary" checked={{ ...getFieldProps('isAvailable') }} />}
-                      label="isVeg"
-                      labelPlacement="start"
-                    />
-
-                    <FormControlLabel
-                      value="start"
-                      control={<Switch color="primary" checked={{ ...getFieldProps('isAvailable') }} />}
-                      label="isAvailable"
-                      labelPlacement="start"
-                    />
-                  </Stack>
-
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-                    Register
+                    Update
                   </LoadingButton>
                 </Stack>
               </Form>

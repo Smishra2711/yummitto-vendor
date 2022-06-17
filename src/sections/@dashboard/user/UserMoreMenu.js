@@ -10,7 +10,7 @@ import Iconify from '../../../components/Iconify';
 export default function UserMoreMenu(props) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const editUrl = `/dashboard/edit-product/${props.productId}`;
+  const editUrl = `/dashboard/edit-product/${props.productId}/${props.productPrice}/${props.productName}`;
 
   return (
     <>
@@ -29,19 +29,12 @@ export default function UserMoreMenu(props) {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
 
-        
+
         <MenuItem component={RouterLink} to={editUrl} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
-
-        <MenuItem sx={{ color: 'text.secondary' }}>
-          <ListItemIcon>
-            <Iconify icon="eva:trash-2-outline" width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
       </Menu>
