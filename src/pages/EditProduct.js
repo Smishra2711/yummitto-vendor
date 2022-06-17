@@ -44,10 +44,14 @@ export default function EditProduct(props) {
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
-  const updateProduct = async () => {
+  const updateProduct = async (updatedPrice) => {
+
     const config = {
       method: 'put',
       url: `https://${Config.default.BACKEND_API}/vendor/${storeId}/product/${productId}`,
+      body:{
+        price:updatedPrice
+      },
       headers: {
         "content-type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
