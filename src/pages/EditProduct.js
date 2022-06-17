@@ -16,7 +16,7 @@ const Config = require("../utils/config");
 
 export default function EditProduct(props) {
   const navigate = useNavigate();
-  const storeId ="8e3d5689-83c8-4601-9115-37b577600a0d";
+  const storeId = "8e3d5689-83c8-4601-9115-37b577600a0d";
   const { productId, productName, productPrice } = useParams();
 
   const RegisterSchema = Yup.object().shape({
@@ -24,8 +24,8 @@ export default function EditProduct(props) {
     description: Yup.string().min(2, 'Too Short!').max(100, 'Too Long!').required('Description is required'),
     image: "",
     price: Yup.number().required("Please enter Price"),
-    cgst: Yup.number().required("Please Enter CGST"),
-    sgst: Yup.number().required("Please Enter SGST")
+    // cgst: Yup.number().required("Please Enter CGST"),
+    // sgst: Yup.number().required("Please Enter SGST")
   });
 
   const formik = useFormik({
@@ -36,7 +36,7 @@ export default function EditProduct(props) {
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
-      if(updateProduct()){
+      if (updateProduct()) {
         navigate('/dashboard', { replace: true });
       }
     },
@@ -47,7 +47,7 @@ export default function EditProduct(props) {
   const updateProduct = async () => {
     const config = {
       method: 'put',
-      url:`https://${Config.default.BACKEND_API}/vendor/${storeId}/product/${productId}`,
+      url: `https://${Config.default.BACKEND_API}/vendor/${storeId}/product/${productId}`,
       headers: {
         "content-type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
@@ -79,25 +79,6 @@ export default function EditProduct(props) {
             <FormikProvider value={formik}>
               <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
                 <Stack spacing={3}>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <TextField
-                      fullWidth
-                      label="Product name"
-                      {...getFieldProps('name')}
-                      error={Boolean(touched.name && errors.name)}
-                      helperText={touched.name && errors.name}
-                    />
-
-                    <TextField
-                      fullWidth
-                      label="Category"
-                      {...getFieldProps('image')}
-                      error={Boolean(touched.image && errors.image)}
-                      helperText={touched.image && errors.image}
-                      disabled
-                    />
-                  </Stack>
-
                   <TextField
                     fullWidth
                     label="Descripion"
@@ -106,22 +87,14 @@ export default function EditProduct(props) {
                     helperText={touched.description && errors.description}
                     disabled
                   />
-
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                       fullWidth
-                      label="CGST"
-                      {...getFieldProps('cgst')}
-                      error={Boolean(touched.cgst && errors.cgst)}
-                      helperText={touched.cgst && errors.cgst}
-                    />
-
-                    <TextField
-                      fullWidth
-                      label="CGST"
-                      {...getFieldProps('sgst')}
-                      error={Boolean(touched.sgst && errors.sgst)}
-                      helperText={touched.sgst && errors.sgst}
+                      label="Product name"
+                      {...getFieldProps('name')}
+                      error={Boolean(touched.name && errors.name)}
+                      helperText={touched.name && errors.name}
+                      disabled
                     />
 
                     <TextField
