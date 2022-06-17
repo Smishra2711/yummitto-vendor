@@ -2,14 +2,13 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import React, { useState, useEffect } from "react";
 import { useFormik, Form, FormikProvider } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 // material
 import { Card, Container, Stack, TextField, FormControlLabel, Switch, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
 
 const Config = require("../utils/config");
 
@@ -17,22 +16,20 @@ const Config = require("../utils/config");
 
 export default function EditProduct() {
   const navigate = useNavigate();
+  const storeId ="8e3d5689-83c8-4601-9115-37b577600a0d";
+  const { productId } = useParams();
   const [productsData, setProductsData] = useState([]);
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
-    name: "Biriyani",
-    description: "Vin GN kk na",
+    name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Product name required'),
+    description: Yup.string().min(2, 'Too Short!').max(100, 'Too Long!').required('Description is required'),
     image: "",
     category: "c670252c-d06d-4307-a245-ac1a9307c37f",
     isVariant: false,
-    store: "8e3d5689-83c8-4601-9115-37b577600a0d",
-    price: 150,
-    cgst: 1,
-    sgst: 1,
-    isVeg: false,
-    isAvailable: true
+    store: Yup.string().required('Description is required'),
+    price: Yup.number().required("Please enter Price"),
+    cgst: Yup.number().required("Please Enter CGST"),
+    sgst: Yup.number().required("Please Enter SGST")
   });
 
   const formik = useFormik({
@@ -82,8 +79,8 @@ export default function EditProduct() {
 
   const updateProduct = async () => {
     const config = {
-      method: 'get',
-      url: `${Config.default.BACKEND_API}/vendor/user/products`,
+      method: 'put',
+      url:`https://${Config.default.BACKEND_API}/vendor/${storeId}/product/${productId}`,
       headers: {
         "content-type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`

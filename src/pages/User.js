@@ -10,6 +10,7 @@ import {
   Avatar,
   Button,
   Checkbox,
+  Switch,
   TableRow,
   TableBody,
   TableCell,
@@ -33,7 +34,7 @@ const Config  = require("../utils/config");
 const TABLE_HEAD = [
   { id: 'name', label: 'Product Name', alignRight: false },
   { id: 'company', label: 'Description', alignRight: false },
-  { id: 'role', label: 'Amount', alignRight: false },
+  { id: 'price', label: 'Amount', alignRight: false },
   { id: 'isVerified', label: 'isAvailable', alignRight: false },
   { id: 'status', label: 'Action', alignRight: false },
   { id: '' },
@@ -186,7 +187,7 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, isAvailable, description, image, amount } = row;
+                    const { id, name, isAvailable, description, image, price, cgst, sgst } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -210,10 +211,12 @@ export default function User() {
                           </Stack>
                         </TableCell>
                         <TableCell align="left">{description}</TableCell>
-                        <TableCell align="left">{amount}</TableCell>
-                        <TableCell align="left">{isAvailable ? 'Yes' : 'No'}</TableCell>
+                        <TableCell align="left">{price}</TableCell>
+                        <TableCell align="left">
+                          <Switch color="primary" checked={isAvailable} disabled/>
+                        </TableCell>
                         <TableCell align="right">
-                          <UserMoreMenu />
+                          <UserMoreMenu productId={id} productName={name} cgstCharge={cgst}/>
                         </TableCell>
                       </TableRow>
                     );

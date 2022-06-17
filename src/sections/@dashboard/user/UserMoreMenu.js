@@ -7,10 +7,10 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserMoreMenu(productId) {
+export default function UserMoreMenu(props) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const editUrl = `/dashboard/edit-product/${productId}`;
+  const editUrl = `/dashboard/edit-product/${props.productId}`;
 
   return (
     <>
