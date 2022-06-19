@@ -18,7 +18,6 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const [showOTP, setShowOTP] = useState(false)
-  const [showPassword, setShowPassword] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState();
   const [otp, setOTP] = useState();
 
@@ -49,7 +48,9 @@ export default function LoginForm() {
       }).then((res) => {
         if(res.status === 200){
           localStorage.setItem("yummittoVendorToken",res.data.token);
-          navigate('/dashboard', { replace: true })
+          if(fetchProfile()){
+            navigate('/dashboard', { replace: true });
+          }
         }
       })
       .catch(err => alert("Some error occured"))
@@ -58,31 +59,48 @@ export default function LoginForm() {
     }     
   }
 
+  const fetchProfile = async () => {
+    const config = {
+      method: 'get',
+      url: `${Config.default.BACKEND_API}/vendor/user/store`,
+      headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
+      }
+    };
+    axios(config)
+    .then((res) => {
+      const tempObj = res.data.store;
+      localStorage.setItem("yummittoVendorProfile",JSON.stringify(tempObj));
+      return true;
+    })
+    .catch((err) => {
+      console.log(JSON.stringify(err.data));
+      return false;
+    })
+  }
+
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    phone: Yup.number().required('Phone is required'),
+    otp: Yup.number().required('Otp is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
-      remember: true,
+      phone: '',
+      otp: '',
     },
     validationSchema: LoginSchema,
 
     onSubmit: async (e) => {      
       e.preventDefault(); 
+      console.log("Submitting login");
       verifyOTP();
       // navigate('/dashboard', { replace: true });
     },
   });
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-
-  const handleShowPassword = () => {
-    setShowPassword((show) => !show);
-  };
 
   return (
     <FormikProvider value={formik}>
@@ -97,7 +115,7 @@ export default function LoginForm() {
             onChange={(e) => {
               setPhoneNumber(e.target.value);
             }}
-            // error={Boolean(touched.email && errors.email)}
+            error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
 
