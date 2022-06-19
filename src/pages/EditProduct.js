@@ -17,15 +17,14 @@ const Config = require("../utils/config");
 export default function EditProduct(props) {
   const navigate = useNavigate();
   const storeId = "8e3d5689-83c8-4601-9115-37b577600a0d";
+  const [productPrice1, setProductPrice1] = useState();
   const { productId, productName, productPrice } = useParams();
 
-  const RegisterSchema = Yup.object().shape({
+  const EditProductSchema = Yup.object().shape({
     name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Product name required'),
     description: Yup.string().min(2, 'Too Short!').max(100, 'Too Long!').required('Description is required'),
     image: "",
     price: Yup.number().required("Please enter Price"),
-    // cgst: Yup.number().required("Please Enter CGST"),
-    // sgst: Yup.number().required("Please Enter SGST")
   });
 
   const formik = useFormik({
@@ -34,8 +33,9 @@ export default function EditProduct(props) {
       name: productName,
       price: productPrice
     },
-    validationSchema: RegisterSchema,
+    validationSchema: EditProductSchema,
     onSubmit: () => {
+      alert("Submitting form");
       if (updateProduct()) {
         navigate('/dashboard', { replace: true });
       }
@@ -44,29 +44,34 @@ export default function EditProduct(props) {
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
-  const updateProduct = async (updatedPrice) => {
+  const updateProduct = async () => {
 
-    const config = {
-      method: 'put',
-      url: `https://${Config.default.BACKEND_API}/vendor/${storeId}/product/${productId}`,
-      body:{
-        price:updatedPrice
-      },
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
-      }
-    };
-    axios(config)
-      .then((res) => {
-        console.log(JSON.stringify(res.data));
-        return true;
-      })
-      .catch((err) => {
-        console.log(JSON.stringify(err.data));
-        alert(err.data);
-        return false;
-      })
+    if(productPrice1 != null){
+      const config = {
+        method: 'put',
+        url: `https://${Config.default.BACKEND_API}/vendor/${storeId}/product/${productId}`,
+        body:{
+          price:productPrice1
+        },
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
+        }
+      };
+      axios(config)
+        .then((res) => {
+          console.log(JSON.stringify(res.data));
+          return true;
+        })
+        .catch((err) => {
+          console.log(JSON.stringify(err.data));
+          alert(err.data);
+          return false;
+        })
+    }else{
+      alert("Please Provide  Price");
+    }   
+    
   }
 
   return (
@@ -105,6 +110,7 @@ export default function EditProduct(props) {
                       fullWidth
                       label="Price"
                       {...getFieldProps('price')}
+                      // onChange={(e) => setProductPrice1(e.target.value)}
                       error={Boolean(touched.price && errors.price)}
                       helperText={touched.price && errors.price}
                     />
