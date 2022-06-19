@@ -1,15 +1,10 @@
-// ----------------------------------------------------------------------
 import axios from 'axios';
-
+import {useState, useEffect} from 'react';
 
 const Config = require("../utils/config");
 
-const account = {
-  name:"Vendor Name"
-};
+const fetchAccount = async () =>{
 
-// Fetching User Details from api
-const getAccount = async () => {
   const config = {
     method: 'get',
     url: `${Config.default.BACKEND_API}/vendor/user/store`,
@@ -19,18 +14,21 @@ const getAccount = async () => {
     }
   };
   axios(config)
-    .then((res) => {
-      console.log(JSON.stringify(res.data));
-      const tempObj = res.data.store;
-      account.name = "Yummitto Vendor";
-      account.email = "";
-      account.photoURL = "";
-    })
-    .catch((err) => {
-      console.log(JSON.stringify(err.data));
-    })
+  .then((res) => {
+    console.log(JSON.stringify(res.data));
+    const tempObj = res.data.store;
+    // setProfile(tempObj);
+  })
+  .catch((err) => {
+    console.log(JSON.stringify(err.data));
+  })
 }
 
-getAccount();
+
+const account = {
+  displayName: 'Vendor Name',
+  email: 'email@gmail.com',
+  photoURL: '/static/mock-images/avatars/avatar_default.jpg',
+};
 
 export default account;
