@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab';
 // component
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
+import account from '../_mock/account';
 
 const Config = require("../utils/config");
 
@@ -16,14 +17,13 @@ const Config = require("../utils/config");
 
 export default function EditProduct(props) {
   const navigate = useNavigate();
-  const storeId = "8e3d5689-83c8-4601-9115-37b577600a0d";
+  const storeId = account.storeId;
   const [productPrice1, setProductPrice1] = useState();
   const { productId, productName, productPrice } = useParams();
 
   const EditProductSchema = Yup.object().shape({
     name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Product name required'),
     description: Yup.string().min(2, 'Too Short!').max(100, 'Too Long!').required('Description is required'),
-    image: "",
     price: Yup.number().required("Please enter Price"),
   });
 
@@ -46,18 +46,19 @@ export default function EditProduct(props) {
 
   const updateProduct = async () => {
 
-    if(productPrice1 != null){
+    if (productPrice1 != null) {
       const config = {
         method: 'put',
-        url: `https://${Config.default.BACKEND_API}/vendor/${storeId}/product/${productId}`,
-        body:{
-          price:productPrice1
+        url: `${Config.default.BACKEND_API}/vendor/${storeId}/product/${productId}`,
+        body: {
+          price: productPrice1
         },
         headers: {
           "content-type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
         }
       };
+      
       axios(config)
         .then((res) => {
           console.log(JSON.stringify(res.data));
@@ -68,10 +69,10 @@ export default function EditProduct(props) {
           alert(err.data);
           return false;
         })
-    }else{
+    } else {
       alert("Please Provide  Price");
-    }   
-    
+    }
+
   }
 
   return (
@@ -86,7 +87,7 @@ export default function EditProduct(props) {
         <Card>
           <Scrollbar>
             <FormikProvider value={formik}>
-              <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+              <Form autoComplete="off" onSubmit={handleSubmit}>
                 <Stack spacing={3}>
                   <TextField
                     fullWidth
@@ -109,14 +110,16 @@ export default function EditProduct(props) {
                     <TextField
                       fullWidth
                       label="Price"
-                      {...getFieldProps('price')}
-                      // onChange={(e) => setProductPrice1(e.target.value)}
+                      // {...getFieldProps('price')}
+                      onChange={(e) => {
+                        setProductPrice1(e.target.value);
+                      }}
                       error={Boolean(touched.price && errors.price)}
                       helperText={touched.price && errors.price}
                     />
                   </Stack>
 
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+                  <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting} onClick={updateProduct}>
                     Update
                   </LoadingButton>
                 </Stack>
