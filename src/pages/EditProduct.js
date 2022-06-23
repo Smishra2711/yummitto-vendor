@@ -19,6 +19,7 @@ export default function EditProduct(props) {
   const navigate = useNavigate();
   const storeId = account.storeId;
   const [productPrice1, setProductPrice1] = useState();
+  const [isSubmitting1, setIsSubmitting1] = useState();
   const { productId, productName, productPrice } = useParams();
 
   const EditProductSchema = Yup.object().shape({
@@ -42,15 +43,18 @@ export default function EditProduct(props) {
     },
   });
 
+  // setProductPrice1(productPrice);
+
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   const updateProduct = async () => {
-
+   
     if (productPrice1 != null) {
+      setIsSubmitting1(true);
       const config = {
         method: 'put',
         url: `${Config.default.BACKEND_API}/vendor/${storeId}/product/${productId}`,
-        body: {
+        data: {
           price: productPrice1
         },
         headers: {
@@ -61,12 +65,13 @@ export default function EditProduct(props) {
       
       axios(config)
         .then((res) => {
-          console.log(JSON.stringify(res.data));
+          alert(JSON.stringify(res.data.message));
+          setIsSubmitting1(false);
           return true;
         })
         .catch((err) => {
           console.log(JSON.stringify(err.data));
-          alert(err.data);
+          setIsSubmitting1(false);
           return false;
         })
     } else {
@@ -95,7 +100,7 @@ export default function EditProduct(props) {
                     {...getFieldProps('description')}
                     error={Boolean(touched.description && errors.description)}
                     helperText={touched.description && errors.description}
-                    disabled
+                    readonly
                   />
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
@@ -104,7 +109,7 @@ export default function EditProduct(props) {
                       {...getFieldProps('name')}
                       error={Boolean(touched.name && errors.name)}
                       helperText={touched.name && errors.name}
-                      disabled
+                      readonly
                     />
 
                     <TextField
@@ -119,7 +124,7 @@ export default function EditProduct(props) {
                     />
                   </Stack>
 
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting} onClick={updateProduct}>
+                  <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting1} onClick={updateProduct}>
                     Update
                   </LoadingButton>
                 </Stack>
