@@ -109,7 +109,7 @@ export default function EditProduct(props) {
                       {...getFieldProps('name')}
                       error={Boolean(touched.name && errors.name)}
                       helperText={touched.name && errors.name}
-                      readonly
+                      disabled
                     />
 
                     <TextField
