@@ -67,6 +67,7 @@ export default function EditProduct(props) {
         .then((res) => {
           alert(JSON.stringify(res.data.message));
           setIsSubmitting1(false);
+          navigate('/dashboard/my-products');
           return true;
         })
         .catch((err) => {
