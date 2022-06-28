@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 // material
 import { Container, Stack, Typography } from '@mui/material';
 // components
@@ -7,10 +8,14 @@ import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } fro
 // mock
 import PRODUCTS from '../_mock/products';
 
+
+const Config  = require("../utils/config");
 // ----------------------------------------------------------------------
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
+  const [productsData, setProductsData] = useState([]);
+
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -19,6 +24,31 @@ export default function EcommerceShop() {
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
+
+  // Fetching Products from api
+  const getProducts = async () => {
+    const config = {
+      method: 'get',
+      url: `${Config.default.BACKEND_API}/vendor/user/products`,
+      headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("yummittoVendorToken")}`
+      }
+    };
+    await axios(config)
+      .then((res) => {
+        console.log("Fetching products");
+        const tempObj = res.data.categories.map((item) => item.products[0])
+        setProductsData(tempObj);
+      })
+      .catch((err) => {
+        console.log(JSON.stringify(err.data));
+      })
+  }
+
+  useEffect(() => {
+    getProducts();
+  },[])
 
   return (
     <Page title="Dashboard: Products">
@@ -38,7 +68,7 @@ export default function EcommerceShop() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
+        <ProductList products={productsData} />
         <ProductCartWidget />
       </Container>
     </Page>

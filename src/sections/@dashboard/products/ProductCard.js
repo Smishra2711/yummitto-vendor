@@ -26,15 +26,15 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+  const { id, name, description, isVeg, image, price, isAvailable } = product;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
+        {isAvailable && (
           <Label
             variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
+            color={(isAvailable === 'false' && 'error') || 'info'}
             sx={{
               zIndex: 9,
               top: 16,
@@ -43,10 +43,10 @@ export default function ShopProductCard({ product }) {
               textTransform: 'uppercase',
             }}
           >
-            {status}
+            {isAvailable ? 'Available':'Not Available'}
           </Label>
         )}
-        <ProductImgStyle alt={name} src={cover} />
+        <ProductImgStyle alt={name} src={image} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
@@ -57,20 +57,20 @@ export default function ShopProductCard({ product }) {
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={colors} />
+          {/* <ColorPreview colors={"#00AB55"} /> */}
           <Typography variant="subtitle1">
             <Typography
               component="span"
               variant="body1"
               sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through',
+                color: 'text',
+                // textDecoration: 'line-through',
               }}
             >
-              {priceSale && fCurrency(priceSale)}
+              {description}
             </Typography>
-            &nbsp;
-            {fCurrency(price)}
+            <br/>
+            {fINRCurrency(price)}
           </Typography>
         </Stack>
       </Stack>
