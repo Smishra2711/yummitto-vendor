@@ -1,19 +1,10 @@
-## Minimal [(Free version)](https://minimal-kit-react.vercel.app/)
+## Yummitto Vendor Portal [W Mishra Digital]
 
-![license](https://img.shields.io/badge/license-MIT-blue.svg)
-
-> Free React Admin Dashboard made with Material-UI components and React.
+![license](https://wmishra.com/legal/license)
 
 ![preview](public/static/preview.jpg)
 
-| [Minimal Free](https://minimal-kit-react.vercel.app/) | [Minimal](https://material-ui.com/store/items/minimal-dashboard/) |
-| ----------------------------------------------------- | :---------------------------------------------------------------- |
-| **7** Demo pages                                      | **42+** demo pages                                                |
-| -                                                     | ✓ Multi-language                                                  |
-| -                                                     | ✓ Dark/Light Mode 🌓                                              |
-| -                                                     | ✓ [More components](https://minimals.cc/components)               |
-| -                                                     | ✓ TypeScript version                                              |
-| -                                                     | ✓ Design files (Figma & Sketch)                                   |
+| [Minimal Free](https://minimal-kit-react.vercel.app/) | 
 
 ## Page demo
 
