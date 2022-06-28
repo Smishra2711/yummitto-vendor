@@ -8,6 +8,7 @@ import { fINRCurrency } from '../../../utils/formatNumber';
 // components
 import Label from '../../../components/Label';
 import { ColorPreview } from '../../../components/color-utils';
+import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,9 @@ export default function ShopProductCard({ product }) {
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link to={editUrl} color="inherit" underline="hover" component={RouterLink}>
+          <ListItemIcon>
+            <Iconify icon="eva:edit-fill" width={24} height={24} />
+          </ListItemIcon>
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>
