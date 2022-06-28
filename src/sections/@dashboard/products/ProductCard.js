@@ -27,6 +27,7 @@ ShopProductCard.propTypes = {
 
 export default function ShopProductCard({ product }) {
   const { id, name, description, isVeg, image, price, isAvailable } = product;
+  const editUrl = `/dashboard/edit-product/${id}/${price}/${name}`;
 
   return (
     <Card>
@@ -50,7 +51,7 @@ export default function ShopProductCard({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link to="#" color="inherit" underline="hover" component={RouterLink}>
+        <Link to={editUrl} color="inherit" underline="hover" component={RouterLink}>
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>
